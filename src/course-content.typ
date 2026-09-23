@@ -34,7 +34,7 @@
   }).join(" ")
 }
 
-#let document-title(name: none, code: none, term: none, author: none, author-label: none, subtitle: none) = align(center)[
+#let document-title(name: none, code: none, term: none, date: none, author: none, author-label: none, subtitle: none) = align(center)[
   #v(2.7em, weak: false)
   #text(size: 1.667em)[#name]
   #if present(author) { v(0.65em); text(size: 1em, author-block(author, label: author-label)) }
@@ -43,9 +43,10 @@
   #code
   #v(1.1em)
   #term
+  #if present(date) { v(0.65em); text(size: 1em, date) }
 ]
 
-#let course-cover(name: none, code: none, term: none, author: none, author-label: none, institution: none, description: none, instructors: (), epigraph: none) = {
+#let course-cover(name: none, code: none, term: none, date: none, author: none, author-label: none, institution: none, description: none, instructors: (), epigraph: none) = {
   bookmark([Title Page])
   let names = instructor-names(instructors)
   let professor = if names.len() > 0 { names.first() } else { none }
@@ -58,6 +59,7 @@
     let terminfo = if present(institution) { [#institution, #term] } else { term }
     text(size: 1.25em, terminfo); v(.1fr)
     if professor != none { text(size: 1.25em)[Prof. #professor] }
+    if present(date) { v(0.65em); text(size: 1.1em, date) }
     v(0.65fr)
     if epigraph != none {
       block(
@@ -100,8 +102,8 @@
   ]
 }
 
-#let front-matter(name: none, code: none, term: none, author: none, author-label: none, institution: none, description: none, instructors: (), meetings: (), exams: (), epigraph: none) = {
-  course-cover(name: name, code: code, term: term, author: author, author-label: author-label, institution: institution,
+#let front-matter(name: none, code: none, term: none, date: none, author: none, author-label: none, institution: none, description: none, instructors: (), meetings: (), exams: (), epigraph: none) = {
+  course-cover(name: name, code: code, term: term, date: date, author: author, author-label: author-label, institution: institution,
     description: description, instructors: instructors, epigraph: epigraph)
   bookmark([Front Matter])
   set par(first-line-indent: 0em, justify: false)
@@ -125,11 +127,11 @@
   }
 }
 
-#let course-document(name: none, code: none, term: none, author: none, author-label: none, institution: none, description: none, instructors: (),
+#let course-document(name: none, code: none, term: none, date: none, author: none, author-label: none, institution: none, description: none, instructors: (),
   meetings: (), exams: (), mode: "full", notes: none, homework: none, epigraph: none) = {
-  let title(subtitle: none) = document-title(name: name, code: code, term: term,
+  let title(subtitle: none) = document-title(name: name, code: code, term: term, date: date,
     author: author, author-label: author-label, subtitle: subtitle)
-  let front() = front-matter(name: name, code: code, term: term, author: author, author-label: author-label,
+  let front() = front-matter(name: name, code: code, term: term, date: date, author: author, author-label: author-label,
     institution: institution, description: description, instructors: instructors,
     meetings: meetings, exams: exams, epigraph: epigraph)
   let contents() = { pagebreak(); outline(title: [Table of Contents]); pagebreak() }
