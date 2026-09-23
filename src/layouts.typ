@@ -94,6 +94,7 @@
 // no cover, front matter, chapters, or course-specific configuration.
 #let notes(
   title: "Notes",
+  date: none,
   author: none,
   author-label: none,
   fonts: default-fonts,
@@ -112,7 +113,7 @@
     ],
     chapter-headings: false,
   )[
-    #compact-header(title, author: author, author-label: author-label)
+    #compact-header(title, author: author, author-label: author-label, date: date)
     #body
   ]
 }
@@ -176,7 +177,7 @@
 
 #let academic-notes(
   current: "full",
-  name: "Course Notes", code: "", term: "", author: none, author-label: none, instructors: (), meetings: (), exams: (), notes: none, homework: none,
+  name: "Course Notes", code: "", term: "", date: none, author: none, author-label: none, instructors: (), meetings: (), exams: (), notes: none, homework: none,
   institution: none, description: none, epigraph: none,
   fonts: default-fonts, font-style: "serif", body,
 ) = {
@@ -209,7 +210,7 @@
     },
   )[
     #course-document(
-      name: name, code: code, term: term, author: author, author-label: author-label,
+      name: name, code: code, term: term, date: date, author: author, author-label: author-label,
       institution: institution, description: description, epigraph: epigraph,
       instructors: instructors, meetings: meetings, exams: exams,
       mode: render.mode,

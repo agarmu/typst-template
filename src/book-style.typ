@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 #import "authors.typ": author-block
+#import "course-info.typ": present
 
 // Book-like typography and small composition helpers inspired by mousse-notes.
 // Course orchestration stays in layouts.typ; this module is deliberately
@@ -39,6 +40,7 @@
   title,
   author: none,
   author-label: none,
+  date: none,
   kicker: none,
   detail: none,
 ) = block(
@@ -55,6 +57,10 @@
   #if author != none {
     v(0.45em)
     text(size: 0.95em, author-block(author, label: author-label))
+  }
+  #if present(date) {
+    v(0.3em)
+    text(size: 0.9em, date)
   }
   #if detail != none {
     v(0.3em)
