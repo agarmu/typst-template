@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: 2026 Mukul Agarwal
+# SPDX-License-Identifier: AGPL-3.0-only
+
+[package]
+name = "mukul-notes"
+version = "0.0.1"
+entrypoint = "src/lib.typ"
+authors = ["Mukul Agarwal"]
+description = "Reusable Typst layouts for notes, books, course notes, and homework."
+compiler = "0.15.1"
+license = "AGPL-3.0-only"
+exclude = ["build/", "tests/", "scripts/", ".git/", ".github/"]
