@@ -8,7 +8,7 @@
 #import "document-context.typ": document-context
 #import "course-content.typ": course-document
 #import "book-content.typ": book-document
-#import "book-style.typ": compact-header, default-fonts, font-pair, prose-indent, running-footer, running-header
+#import "book-style.typ": compact-header, default-fonts, font-pair, running-footer, running-header
 #import "book-style.typ": show-book-heading
 
 // Shared rendering shell. Public document environments supply their own
@@ -59,14 +59,14 @@
   show raw.where(block: true): set text(size: 0.8em)
   // Book-like prose uses paragraph indentation and modest vertical spacing.
   set par(
-    first-line-indent: (amount: prose-indent, all: false),
+    first-line-indent: 0em,
     justify: true,
     leading: 0.55em + 1pt,
     spacing: 0.5em + 1pt,
   )
   set list(indent: 1.25em, body-indent: 0.5em, spacing: 0.8em)
   set enum(indent: 1.25em, body-indent: 0.5em, spacing: 0.8em)
-  set terms(hanging-indent: prose-indent)
+  set terms(hanging-indent: 1.4em)
   show list: set block(breakable: true)
   show enum: set block(breakable: true)
   set footnote.entry(separator: [])

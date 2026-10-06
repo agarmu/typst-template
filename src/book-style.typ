@@ -8,8 +8,6 @@
 // Course orchestration stays in layouts.typ; this module is deliberately
 // reusable by notes, homework, and standalone components.
 
-#let prose-indent = 1.4em
-
 #let default-fonts = (
   serif: (
     text: "New Computer Modern",
