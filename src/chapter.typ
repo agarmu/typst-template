@@ -7,10 +7,11 @@
 
 #import "course-info.typ": normalized
 
-#let chapter(title: none, id: none, body) = {
+#let chapter(title: none, id: none, numbered: true, short-title: none, body) = {
   if title == none {
     panic("chapter requires a title")
   }
+  let header-title = if short-title == none { title } else { short-title }
 
   context {
     let selection = document-context.get().at("selection", default: none)
@@ -20,7 +21,12 @@
     )
     if selected {
       pagebreak(weak: true)
-      heading(level: 1, title)
+      metadata((kind: "chapter-title", title: header-title))
+      if numbered {
+        heading(level: 1, title)
+      } else {
+        heading(level: 1, numbering: none, title)
+      }
       body
     }
   }

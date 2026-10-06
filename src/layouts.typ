@@ -62,7 +62,7 @@
     first-line-indent: 0em,
     justify: true,
     leading: 0.55em + 1pt,
-    spacing: 0.5em + 1pt,
+    spacing: 1em,
   )
   set list(indent: 1.25em, body-indent: 0.5em, spacing: 0.8em)
   set enum(indent: 1.25em, body-indent: 0.5em, spacing: 0.8em)

@@ -78,6 +78,12 @@
     .filter(it => it.supplement != [bookmark-only])
     .at(-1, default: none)
   if current-chapter == none { return }
+  let chapter-title = query(selector(metadata).before(here()))
+    .map(it => it.value)
+    .filter(value => type(value) == dictionary and value.at("kind", default: none) == "chapter-title")
+    .at(-1, default: none)
+  if chapter-title == none { return }
+  let chapter-title = chapter-title.at("title")
 
   let section-after = query(selector(heading.where(level: 2)).after(here())).at(0, default: none)
   let section-before = query(selector(heading.where(level: 2)).before(here())).at(-1, default: none)
@@ -94,7 +100,6 @@
     [sec. #numbering(current-section.numbering, ..counter(heading).at(current-section.location()))]
   }
 
-  set text(size: 9pt)
   if calc.even(page-number) {
     grid(
       columns: (1fr, 2fr, 1fr),
@@ -105,7 +110,7 @@
     grid(
       columns: (1fr, 2fr, 1fr),
       align: (left, center, right),
-      smallcaps(section-number), smallcaps(current-chapter.body), counter(page).display("1"),
+      smallcaps(section-number), smallcaps(chapter-title), counter(page).display("1"),
     )
   }
 }
@@ -116,7 +121,7 @@
     .at(-1, default: none)
   let is-chapter-page = current-chapter != none and current-chapter.location().page() == here().page()
   if is-chapter-page {
-    align(center, text(size: 9pt, counter(page).display("1")))
+    align(center, counter(page).display("1"))
   }
 }
 
@@ -130,8 +135,12 @@
   ).at(level - 1)
   block(sticky: true, breakable: false, above: style.above, below: style.below)[
     #set par(first-line-indent: 0em, justify: false)
-    #set text(size: style.size, weight: if level == 4 { "regular" } else { "bold" },
-      style: if level == 4 { "italic" } else { "normal" }, hyphenate: false)
+    #set text(
+      size: style.size,
+      weight: if level == 4 { "regular" } else { "bold" },
+      style: if level == 4 { "italic" } else { "normal" },
+      hyphenate: false,
+    )
     #if it.numbering != none {
       context counter(heading).display(it.numbering)
       if level <= 2 { h(0.5em) } else { [. ] }
