@@ -10,8 +10,13 @@
 
 
 // Exercise titles stay beside their numbers, point values align at the far
-// right. Spacing separates exercises without decorative bars.
+// right, and a colored bar spans the full exercise.
 #let show-exercise(it) = {
+  let number-inside = it.options.at("number-inside", default: auto)
+  set enum(numbering: number-inside) if number-inside != auto
+  let c = oklch(65%, 0.15, 250deg)
+  let body-color = c.mix((c, 50%), (black, 50%), space: oklab)
+  let color = body-color
   let points = it.options.at("points", default: none)
   let point-label = if points == 1 { "point" } else { "points" }
   let head = [#it.supplement]
@@ -27,16 +32,17 @@
     width: 100%,
     above: 0.8em,
     below: 0.8em,
-    inset: (y: 0.3em),
+    stroke: (left: 0.2em + color),
+    inset: (left: 0.8em, y: 0.3em),
   )[
     #grid(
       columns: (1fr, auto),
       column-gutter: 1em,
-      text(weight: "bold", head),
-      if points == none { [] } else { text(weight: "bold")[#points #point-label] },
+      text(weight: "bold", fill: color, head),
+      if points == none { [] } else { text(weight: "bold", fill: color)[#points #point-label] },
     )
     #v(0.6em)
-    #it.body
+    #text(fill: body-color)[#it.body]
   ]
 }
 
@@ -46,16 +52,24 @@
   kind: "exercise",
   numbering-depth: 0,
 )
-#let exercise(points: none, ..args) = exercise-base(
+// Set number-inside to an enum numbering pattern or function; auto inherits
+// the surrounding enum style. Example: exercise.with(number-inside: "(a)").
+#let exercise(points: none, number-inside: auto, ..args) = exercise-base(
   ..args,
-  options: (points: points),
+  options: (points: points, number-inside: number-inside),
 )
 #let reset-exercise-counter() = theoretic.thm-counter.update(0)
 
 
 // Answers use Theoretic's standard proof rendering; the wrapper below adds
 // document-mode-aware solution censoring.
-#let answer-with-solutions = theoretic.proof.with(supplement: "Answer")
+#let answer-with-solutions = theoretic.proof.with(
+  supplement: "Answer",
+  options: (
+    head-font: (fill: black),
+    body-font: (fill: black),
+  ),
+)
 
 // Partial-censor documents retain homework prompts but omit their solutions.
 #let answer(..args) = context {
