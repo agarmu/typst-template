@@ -8,6 +8,9 @@
 #import "book-style.typ": compact-header
 #import "theorems.typ": reset-exercise-counter
 
+#let homework-counter = counter("homework-entry")
+#let reset-homework-counter() = homework-counter.update(0)
+
 // A hanging, prose-style entry: “Label. Body”.
 #let labeled(label, body) = block(
   width: 100%,
@@ -62,6 +65,8 @@
     let mode = config.at("mode", default: "full")
     let selected = matches-selection(config.at("selection", default: none), id, number, title)
     if ("full", "censor-partial", "hws").contains(mode) {
+      if homework-counter.get().first() > 0 { pagebreak() }
+      homework-counter.step()
       heading(level: 2, numbering: none, title)
       if present(due-date) { labeled([Due], format-due(due-date)) }
       if mode == "hws" {
@@ -72,7 +77,9 @@
         body
       }
     } else if mode == "hw" and selected {
-      standalone-title(config, title, due-date)
+      document-context.update(config + (
+        homework-header: standalone-title(config, title, due-date),
+      ))
       reset-exercise-counter()
       body
     }

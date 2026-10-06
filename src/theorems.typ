@@ -5,9 +5,9 @@
 
 #import "@preview/theoretic:0.4.0"
 #import "document-context.typ": document-context
-// Mode-aware manual breaks for shared homework/course content.
-#let hwbreak() = context if document-context.get().at("mode", default: "full") == "hw" { colbreak() }
 
+// Manual break for content shared between course and standalone-homework modes.
+#let hwbreak() = context if document-context.get().at("mode", default: "full") == "hw" { colbreak() }
 
 // Exercise titles stay beside their numbers, point values align at the far
 // right, and a colored bar spans the full exercise.
@@ -25,10 +25,7 @@
   if it.options.at("link", default: none) != none {
     head = link(it.options.link, head)
   }
-  // `it.number` is content in theoretic, so compare its rendered value.
-  if str(it.number) != "1" { hwbreak() }
-
-  block(
+  let rendered-exercise = block(
     width: 100%,
     above: 0.8em,
     below: 0.8em,
@@ -44,6 +41,29 @@
     #v(0.6em)
     #text(fill: body-color)[#it.body]
   ]
+
+  context {
+    let config = document-context.get()
+    if config.at("mode", default: "full") == "hw" {
+      let page-size = config.at("page-size")
+      let margin = config.at("page-margin")
+      let page-body = if str(it.number) == "1" {
+        [#config.at("homework-header", default: []) #rendered-exercise]
+      } else {
+        rendered-exercise
+      }
+      let body-height = measure(page-body, width: page-size.width - 2 * margin).height
+      let fitted-height = calc.min(body-height + 2 * margin, page-size.height)
+      page(
+        width: page-size.width,
+        height: fitted-height,
+        margin: margin,
+        page-body,
+      )
+    } else {
+      rendered-exercise
+    }
+  }
 }
 
 #let exercise-base = theoretic.theorem.with(

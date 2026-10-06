@@ -19,6 +19,7 @@
   keywords: (),
   fonts: default-fonts,
   font-style: "serif",
+  page-width: 8.5in,
   page-height: 11in,
   margin: (x: 17.5%, y: 12.5%),
   header: none,
@@ -40,7 +41,7 @@
     fill: black,
   )
   set page(
-    width: 8.5in,
+    width: page-width,
     height: page-height,
     margin: margin,
     header: header,
@@ -179,10 +180,12 @@
   current: "full",
   name: "Course Notes", code: "", term: "", date: none, author: none, author-label: none, instructors: (), meetings: (), exams: (), notes: none, homework: none,
   institution: none, description: none, epigraph: none,
-  fonts: default-fonts, font-style: "serif", body,
+  fonts: default-fonts, font-style: "serif", page-size: (width: 8.5in, height: 11in), body,
 ) = {
   let render = render-options(current)
   let is-homework-document = ("hws", "hw").contains(render.mode)
+  let paper-width = page-size.at("width")
+  let paper-height = page-size.at("height")
   let authors = if author == none {
     instructors.map(person => person.at("name", default: ""))
   } else {
@@ -193,6 +196,7 @@
   document-context.update((
     name: name, code: code, term: term, author: author, author-label: author-label,
     mode: render.mode, selection: render.selection,
+    page-size: page-size, page-margin: 1in,
   ))
   styled-notes(
     title: title,
@@ -200,7 +204,8 @@
     keywords: (code, name, term),
     fonts: fonts,
     font-style: font-style,
-    page-height: if render.mode == "hw" { auto } else { 11in },
+    page-width: paper-width,
+    page-height: if render.mode == "hw" { auto } else { paper-height },
     margin: if render.mode == "hw" { 1in } else { (x: 17.5%, y: 12.5%) },
     header: if is-homework-document { none } else { running-header(name) },
     footer: if is-homework-document {

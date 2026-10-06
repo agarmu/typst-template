@@ -6,6 +6,7 @@
 #import "course-info.typ": items, present, shown, time-range
 #import "book-content.typ": bookmark
 #import "authors.typ": author-block
+#import "homework.typ": reset-homework-counter
 
 #let instructor-names(instructors) = instructors.filter(
   person => person.at("role", default: "") == "Instructor",
@@ -140,11 +141,12 @@
     set heading(numbering: "A.1")
     counter(heading).update(0)
     heading(level: 1, outlined: true)[Homework Assignments]
+    reset-homework-counter()
     homework
   }
   if mode == "full" or mode == "censor-partial" { front(); contents(); notes; appendix() }
   else if mode == "censor" { front(); contents(); notes }
   else if mode == "notes" { title(subtitle: [Lecture Notes]); contents(); notes }
-  else if mode == "hws" { title(subtitle: [Homework]); v(1.5em); homework }
+  else if mode == "hws" { title(subtitle: [Homework]); v(1.5em); reset-homework-counter(); homework }
   else if mode == "hw" { homework }
 }
