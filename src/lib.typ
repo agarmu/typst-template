@@ -8,4 +8,5 @@
 #import "chapter.typ": chapter, part
 #import "homework.typ": homework
 #import "resume.typ": resume, resume-entry
+#import "cover-letter.typ": cover-letter
 #import "theorems.typ": answer, exercise, hwbreak
